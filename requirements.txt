@@ -1,5 +1,5 @@
 streamlit
 opencv-python-headless
 numpy
-face2face
+socaity-face2face==1.1.7
 pillow
