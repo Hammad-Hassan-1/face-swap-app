@@ -5,6 +5,9 @@ from face2face import Face2Face
 import tempfile
 import os
 
+# --- Ensure model directory is writable on Streamlit Cloud ---
+os.environ["FACE2FACE_MODEL_DIR"] = "./models"  # This allows model saving in app folder
+
 # --- Initialize Face2Face only once ---
 @st.cache_resource
 def init_f2f():
