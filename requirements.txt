@@ -1,5 +1,6 @@
 streamlit
 opencv-python-headless
 numpy
-socaity-face2face==1.1.7
+socaity-face2face @ https://github.com/Socaity/face2face/archive/refs/heads/main.zip
 pillow
+
