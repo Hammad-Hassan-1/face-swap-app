@@ -1,9 +1,12 @@
 import streamlit as st
 import cv2
 import numpy as np
-from socaity_face2face import Face2Face  # Updated import
+from face2face import Face2Face
 import tempfile
 import os
+
+# --- Ensure model directory is writable on Streamlit Cloud ---
+os.environ["FACE2FACE_MODEL_DIR"] = "./models"  # This allows model saving in app folder
 
 # --- Initialize Face2Face only once ---
 @st.cache_resource
@@ -40,27 +43,26 @@ if source_file and target_file:
     # --- Swap Faces button ---
     if st.button("Swap Faces"):
         st.subheader("Swapping Faces...")
-        with st.spinner("Processing face swap, please wait..."):
-            try:
-                # --- Perform face swap ---
-                swapped_img = f2f.swap_img_to_img(source_path, target_path)
-                swapped_img_bgr = cv2.cvtColor(swapped_img, cv2.COLOR_RGB2BGR)
+        try:
+            # --- Perform face swap ---
+            swapped_img = f2f.swap_img_to_img(source_path, target_path)
+            swapped_img_bgr = cv2.cvtColor(swapped_img, cv2.COLOR_RGB2BGR)
 
-                # --- Display result ---
-                st.image(swapped_img_bgr, caption="Swapped Face Result", use_container_width=True)
+            # --- Display result ---
+            st.image(swapped_img_bgr, caption="Swapped Face Result", use_container_width=True)
 
-                # --- Download button ---
-                result_path = "swapped_result.jpg"
-                cv2.imwrite(result_path, swapped_img_bgr)
-                with open(result_path, "rb") as f:
-                    st.download_button("Download Swapped Image", f, file_name="swapped_result.jpg")
+            # --- Download button ---
+            result_path = "swapped_result.jpg"
+            cv2.imwrite(result_path, swapped_img_bgr)
+            with open(result_path, "rb") as f:
+                st.download_button("Download Swapped Image", f, file_name="swapped_result.jpg")
 
-            except Exception as e:
-                st.error(f"Face swapping failed: {e}")
-            finally:
-                # --- Clean up result file ---
-                if os.path.exists(result_path):
-                    os.remove(result_path)
+        except Exception as e:
+            st.error(f"Face swapping failed: {e}")
+        finally:
+            # --- Clean up result file ---
+            if os.path.exists(result_path):
+                os.remove(result_path)
 
     # --- Clean up temp files ---
     try:
@@ -69,6 +71,6 @@ if source_file and target_file:
         if os.path.exists(target_path):
             os.remove(target_path)
     except Exception as e:
-        st.warning(f"Failed to clean up temporary files: {e}")
+        st.warning(f"Failed to clean up temporary files: {e}") 
 else:
     st.info("Please upload both a source and target image to proceed.")
