@@ -1,4 +1,4 @@
 streamlit==1.35.0
-opencv-python-headless==4.9.0.80
+opencv-python-headless
 numpy==1.26.4
 socaity-face2face==1.1.7
