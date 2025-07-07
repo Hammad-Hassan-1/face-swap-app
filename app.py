@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image
+import cv2
 import numpy as np
 from face2face import Face2Face
 import tempfile
@@ -46,9 +46,7 @@ if source_file and target_file:
         try:
             # --- Perform face swap ---
             swapped_img = f2f.swap_img_to_img(source_path, target_path)
-            swapped_img_pil = Image.fromarray(swapped_img)
-            st.image(swapped_img_pil, caption="Swapped Face Result", use_container_width=True)
-
+            swapped_img_bgr = cv2.cvtColor(swapped_img, cv2.COLOR_RGB2BGR)
 
             # --- Display result ---
             st.image(swapped_img_bgr, caption="Swapped Face Result", use_container_width=True)
